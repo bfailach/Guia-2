@@ -1,0 +1,31 @@
+package registro.y.listado;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UsuarioPersistencia {
+    private static final String FILE_NAME = "usuarios.dat";
+
+    public static List<Usuario> leerUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            usuarios = (List<Usuario>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("El archivo usuarios.dat no existe, se creará uno nuevo al registrar el primer usuario.");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return usuarios;
+    }
+
+    public static void guardarUsuarios(List<Usuario> usuarios) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            oos.writeObject(usuarios);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
